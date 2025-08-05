@@ -270,6 +270,23 @@ require('lazy').setup({
     })
   end
 },
+  -- Adds a rst LSP plugin that has non-standard features compared to the builtin
+  -- WARNING
+  -- Do not call the nvim-lspconfig.rust_analyzer setup or set up the LSP client for rust-analyzer manually, as doing so may cause conflicts.
+  -- This is a filetype plugin that works out of the box, so there is no need to call a setup function or configure anything to get this plugin working.
+  {
+  'mrcjkb/rustaceanvim',
+  version = '^6', -- Recommended
+  lazy = false, -- This plugin is already lazy
+},
+
+  -- Auto pair and close brackets/parentheses
+  {
+  'm4xshen/autoclose.nvim',
+    config = function()
+      require("autoclose").setup()
+    end,
+  },
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
