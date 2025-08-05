@@ -247,7 +247,29 @@ rtp:prepend(lazypath)
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  -- guess-indent is the default indentation plugin that comes with kickstart, but I found it didn't work great, so am trying out sleuth
+  -- 'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
+  'tpope/vim-sleuth',
+
+  {
+  "ojroques/nvim-osc52",
+  config = function()
+    require("osc52").setup {
+      max_length = 0,       -- copy everything
+      trim = false,
+      silent = false,
+    }
+
+    -- Override the default yank to use OSC52
+    vim.api.nvim_create_autocmd("TextYankPost", {
+      callback = function()
+        if vim.v.event.operator == "y" and vim.v.event.regname == "" then
+          require("osc52").copy_register("")
+        end
+      end,
+    })
+  end
+},
 
   -- NOTE: Plugins can also be added by using a table,
   -- with the first argument being the link and the following
