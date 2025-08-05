@@ -270,6 +270,10 @@ require('lazy').setup({
     })
   end
 },
+
+  -- Official GitHub Copilot plugin
+  'github/copilot.vim',
+
   -- Adds a rst LSP plugin that has non-standard features compared to the builtin
   -- WARNING
   -- Do not call the nvim-lspconfig.rust_analyzer setup or set up the LSP client for rust-analyzer manually, as doing so may cause conflicts.
