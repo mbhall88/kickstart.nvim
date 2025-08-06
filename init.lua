@@ -726,6 +726,7 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        bashls = {},
 
         lua_ls = {
           -- cmd = { ... },
@@ -759,6 +760,8 @@ require('lazy').setup({
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
+        'shellcheck', -- Used to lint shell scripts
+        'shfmt', -- Used to format shell scripts
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -811,6 +814,8 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
+        sh = { 'shfmt' },
+        bash = { 'shfmt' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
@@ -819,6 +824,22 @@ require('lazy').setup({
       },
     },
   },
+
+  { -- Lint shell scripts with shellcheck
+  'mfussenegger/nvim-lint',
+  config = function()
+    require('lint').linters_by_ft = {
+      sh = { 'shellcheck' },
+      bash = { 'shellcheck' },
+    }
+
+    vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
+      callback = function()
+        require('lint').try_lint()
+      end,
+    })
+  end,
+},
 
   { -- Autocompletion
     'saghen/blink.cmp',
