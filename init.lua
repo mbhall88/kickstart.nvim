@@ -169,6 +169,16 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Jumplist navigation (Zellij-safe)
+-- `[J` = jump back (older), `]J` = jump forward (newer)
+vim.keymap.set('n', '[J', '<C-o>', { desc = 'Jump back (jumplist)',  noremap = true, silent = true })
+vim.keymap.set('n', ']J', '<C-i>', { desc = 'Jump forward (jumplist)', noremap = true, silent = true })
+
+-- Optional: leader-based fallback if you prefer mnemonics
+-- <leader>jb = jump back, <leader>jf = jump forward
+-- vim.keymap.set('n', '<leader>jb', '<C-o>', { desc = '[J]ump [B]ack',    noremap = true, silent = true })
+-- vim.keymap.set('n', '<leader>jf', '<C-i>', { desc = '[J]ump [F]orward', noremap = true, silent = true })
+
 -- Clear highlights on search when pressing <Esc> in normal mode
 --  See `:help hlsearch`
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
