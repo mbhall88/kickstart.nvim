@@ -281,11 +281,36 @@ require('lazy').setup({
   end
 },
 
-  -- Official GitHub Copilot plugin
-  'github/copilot.vim',
+  -- GitHub Copilot with Zellij-safe partial-accept keys
+  {
+    'github/copilot.vim',
+    config = function()
+      -- Keep Tab as full accept (default), just add partial-accept + helpers
 
+      local function cmap(lhs, rhs, desc)
+        vim.keymap.set('i', lhs, rhs, {
+          expr = true,
+          replace_keycodes = false,
+          silent = true,
+          desc = 'Copilot: ' .. desc,
+        })
+      end
+
+      -- ✅ Partial accepts (no Alt keys, so Zellij won't steal them)
+      cmap('<C-j>', 'copilot#AcceptLine()', 'Accept suggested LINE')
+      cmap('<C-k>', 'copilot#AcceptWord()', 'Accept suggested WORD')
+
+      -- ✅ Optional helpers
+      cmap('<C-\\>', 'copilot#Accept("\\<CR>")', 'Accept FULL suggestion (alt to <Tab>)')
+      cmap('<C-/>', 'copilot#Dismiss()', 'Dismiss suggestion')
+
+      -- (Tip) If you later want next/prev suggestion, pick Zellij-safe keys like:
+      -- cmap('<C-.>', 'copilot#Next()', 'Next suggestion')
+      -- cmap('<C-,>', 'copilot#Previous()', 'Previous suggestion')
+    end,
+  },
   -- Adds a rst LSP plugin that has non-standard features compared to the builtin
-  -- WARNING
+  -- WARN
   -- Do not call the nvim-lspconfig.rust_analyzer setup or set up the LSP client for rust-analyzer manually, as doing so may cause conflicts.
   -- This is a filetype plugin that works out of the box, so there is no need to call a setup function or configure anything to get this plugin working.
   {
