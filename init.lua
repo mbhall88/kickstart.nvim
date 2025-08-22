@@ -110,6 +110,21 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Always use spaces
+vim.opt.expandtab = true    -- convert tabs to spaces
+vim.opt.tabstop = 4         -- how many spaces a <Tab> counts for
+vim.opt.shiftwidth = 4      -- spaces per indentation
+vim.opt.softtabstop = 4     -- typing <Tab>/<BS> feels natural
+-- Override for some filetypes
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = { "yaml", "json", "html", "css", "lua" },
+  callback = function()
+    vim.opt_local.tabstop = 2
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.softtabstop = 2
+  end,
+})
+
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
 --  Remove this option if you want your OS clipboard to remain independent.
