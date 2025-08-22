@@ -298,7 +298,7 @@ require('lazy').setup({
 
       -- ✅ Partial accepts (no Alt keys, so Zellij won't steal them)
       cmap('<C-j>', 'copilot#AcceptLine()', 'Accept suggested LINE')
-      cmap('<C-k>', 'copilot#AcceptWord()', 'Accept suggested WORD')
+      cmap('<C-.>', 'copilot#AcceptWord()', 'Accept suggested WORD')
 
       -- ✅ Optional helpers
       cmap('<C-\\>', 'copilot#Accept("\\<CR>")', 'Accept FULL suggestion (alt to <Tab>)')
