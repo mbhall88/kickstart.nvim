@@ -209,6 +209,9 @@ vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagn
 -- or just use <C-\><C-n> to exit terminal mode
 vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
 
+-- Shortcut for opening a new terminal window
+vim.keymap.set('n', '<leader>t', '<cmd>split | terminal<CR>', { desc = 'Open new [t]erminal window' })
+
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
 -- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
@@ -241,6 +244,16 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
+  end,
+})
+
+-- Remove line numbers in terminal mode
+vim.api.nvim_create_autocmd('TermOpen', {
+  desc = 'Disable line numbers in terminal mode',
+  group = vim.api.nvim_create_augroup('custom-term-open', { clear = true }),
+  callback = function()
+    vim.opt_local.number = false
+    vim.opt.relativenumber = false
   end,
 })
 
