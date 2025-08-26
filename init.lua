@@ -542,6 +542,10 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
+      -- Custom shell history picker
+      local shell_history = require('custom.shell_history')
+      vim.keymap.set('n', '<leader>fh', shell_history.telescope_shell_history,
+        { desc = '[F]uzzy search [h]istory (shell)' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
