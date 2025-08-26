@@ -110,6 +110,15 @@ vim.o.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.o.showmode = false
 
+-- Force Neovim to use zsh for all external commands and :terminal
+vim.o.shell = vim.fn.exepath('zsh') or 'zsh'
+
+-- Optional: also advertise it to child processes
+vim.env.SHELL = vim.o.shell
+
+-- Make terminal launch a login shell by default (zsh -l)
+vim.g.terminal_default_login_shell = true
+
 -- Always use spaces
 vim.opt.expandtab = true    -- convert tabs to spaces
 vim.opt.tabstop = 4         -- how many spaces a <Tab> counts for
