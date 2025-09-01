@@ -111,7 +111,7 @@ vim.o.mouse = 'a'
 vim.o.showmode = false
 
 -- Force Neovim to use zsh for all external commands and :terminal
-vim.o.shell = vim.fn.exepath('zsh') or 'zsh'
+vim.o.shell = vim.fn.exepath 'zsh' or 'zsh'
 
 -- Optional: also advertise it to child processes
 vim.env.SHELL = vim.o.shell
@@ -120,13 +120,13 @@ vim.env.SHELL = vim.o.shell
 vim.g.terminal_default_login_shell = true
 
 -- Always use spaces
-vim.opt.expandtab = true    -- convert tabs to spaces
-vim.opt.tabstop = 4         -- how many spaces a <Tab> counts for
-vim.opt.shiftwidth = 4      -- spaces per indentation
-vim.opt.softtabstop = 4     -- typing <Tab>/<BS> feels natural
+vim.opt.expandtab = true -- convert tabs to spaces
+vim.opt.tabstop = 4 -- how many spaces a <Tab> counts for
+vim.opt.shiftwidth = 4 -- spaces per indentation
+vim.opt.softtabstop = 4 -- typing <Tab>/<BS> feels natural
 -- Override for some filetypes
-vim.api.nvim_create_autocmd("FileType", {
-  pattern = { "yaml", "json", "html", "css", "lua" },
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'yaml', 'json', 'html', 'css', 'lua' },
   callback = function()
     vim.opt_local.tabstop = 2
     vim.opt_local.shiftwidth = 2
@@ -195,7 +195,7 @@ vim.o.confirm = true
 
 -- Jumplist navigation (Zellij-safe)
 -- `[J` = jump back (older), `]J` = jump forward (newer)
-vim.keymap.set('n', '[J', '<C-o>', { desc = 'Jump back (jumplist)',  noremap = true, silent = true })
+vim.keymap.set('n', '[J', '<C-o>', { desc = 'Jump back (jumplist)', noremap = true, silent = true })
 vim.keymap.set('n', ']J', '<C-i>', { desc = 'Jump forward (jumplist)', noremap = true, silent = true })
 
 -- Optional: leader-based fallback if you prefer mnemonics
@@ -299,24 +299,24 @@ require('lazy').setup({
   'tpope/vim-sleuth',
 
   {
-  "ojroques/nvim-osc52",
-  config = function()
-    require("osc52").setup {
-      max_length = 0,       -- copy everything
-      trim = false,
-      silent = false,
-    }
+    'ojroques/nvim-osc52',
+    config = function()
+      require('osc52').setup {
+        max_length = 0, -- copy everything
+        trim = false,
+        silent = false,
+      }
 
-    -- Override the default yank to use OSC52
-    vim.api.nvim_create_autocmd("TextYankPost", {
-      callback = function()
-        if vim.v.event.operator == "y" and vim.v.event.regname == "" then
-          require("osc52").copy_register("")
-        end
-      end,
-    })
-  end
-},
+      -- Override the default yank to use OSC52
+      vim.api.nvim_create_autocmd('TextYankPost', {
+        callback = function()
+          if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+            require('osc52').copy_register ''
+          end
+        end,
+      })
+    end,
+  },
 
   -- GitHub Copilot with Zellij-safe partial-accept keys
   {
@@ -351,16 +351,16 @@ require('lazy').setup({
   -- Do not call the nvim-lspconfig.rust_analyzer setup or set up the LSP client for rust-analyzer manually, as doing so may cause conflicts.
   -- This is a filetype plugin that works out of the box, so there is no need to call a setup function or configure anything to get this plugin working.
   {
-  'mrcjkb/rustaceanvim',
-  version = '^6', -- Recommended
-  lazy = false, -- This plugin is already lazy
-},
+    'mrcjkb/rustaceanvim',
+    version = '^6', -- Recommended
+    lazy = false, -- This plugin is already lazy
+  },
 
   -- Auto pair and close brackets/parentheses
   {
-  'm4xshen/autoclose.nvim',
+    'm4xshen/autoclose.nvim',
     config = function()
-      require("autoclose").setup()
+      require('autoclose').setup()
     end,
   },
 
@@ -527,8 +527,11 @@ require('lazy').setup({
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
+        pickers = {
+          find_files = { theme = 'ivy' },
+        },
         extensions = {
+          fzf = {},
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
           },
@@ -552,9 +555,8 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
       -- Custom shell history picker
-      local shell_history = require('custom.shell_history')
-      vim.keymap.set('n', '<leader>fh', shell_history.telescope_shell_history,
-        { desc = '[F]uzzy search [h]istory (shell)' })
+      local shell_history = require 'custom.shell_history'
+      vim.keymap.set('n', '<leader>fh', shell_history.telescope_shell_history, { desc = '[F]uzzy search [h]istory (shell)' })
 
       -- Slightly advanced example of overriding default behavior and theme
       vim.keymap.set('n', '<leader>/', function()
@@ -902,20 +904,20 @@ require('lazy').setup({
   },
 
   { -- Lint shell scripts with shellcheck
-  'mfussenegger/nvim-lint',
-  config = function()
-    require('lint').linters_by_ft = {
-      sh = { 'shellcheck' },
-      bash = { 'shellcheck' },
-    }
+    'mfussenegger/nvim-lint',
+    config = function()
+      require('lint').linters_by_ft = {
+        sh = { 'shellcheck' },
+        bash = { 'shellcheck' },
+      }
 
-    vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
-      callback = function()
-        require('lint').try_lint()
-      end,
-    })
-  end,
-},
+      vim.api.nvim_create_autocmd({ 'BufWritePost', 'BufEnter' }, {
+        callback = function()
+          require('lint').try_lint()
+        end,
+      })
+    end,
+  },
 
   { -- Autocompletion
     'saghen/blink.cmp',
