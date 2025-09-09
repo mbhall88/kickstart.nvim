@@ -220,6 +220,7 @@ vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' }
 
 -- Shortcut for opening a new terminal window
 vim.keymap.set('n', '<leader>t', '<cmd>split | terminal<CR>', { desc = 'Open new [t]erminal window' })
+vim.keymap.set('n', '<leader>vt', '<cmd>vsplit | terminal<CR>', { desc = 'Open new [v]ertical [t]erminal window' })
 
 -- TIP: Disable arrow keys in normal mode
 -- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
