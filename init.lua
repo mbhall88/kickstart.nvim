@@ -438,6 +438,21 @@ require('lazy').setup({
     },
   },
 
+  {
+    'sindrets/diffview.nvim',
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+      'nvim-tree/nvim-web-devicons', -- for file icons
+    },
+    -- Optional: add keymaps here if you want quick shortcuts
+    cmd = { 'DiffviewOpen', 'DiffviewClose', 'DiffviewFileHistory' },
+    keys = {
+      { '<leader>gd', '<cmd>DiffviewOpen<cr>', desc = '[G]it [D]iff Open' },
+      { '<leader>gc', '<cmd>DiffviewClose<cr>', desc = '[G]it Diff [C]lose' },
+      { '<leader>gh', '<cmd>DiffviewFileHistory %<cr>', desc = '[G]it [H]istory (Current File)' },
+    },
+  },
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
