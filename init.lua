@@ -320,6 +320,16 @@ require('lazy').setup({
   },
 
   {
+    'snakemake/snakefmt',
+    ft = { 'snakemake' },
+    config = function()
+      require('snakefmt').setup {
+        auto_format = true, -- uncomment to enable auto-format on save
+      }
+    end,
+  },
+
+  {
     'folke/trouble.nvim',
     opts = {}, -- for default options, refer to the configuration section for custom setup.
     cmd = 'Trouble',
@@ -827,7 +837,7 @@ require('lazy').setup({
         -- ts_ls = {},
         --
         bashls = {},
-
+        marksman = {}, -- markdown lsp
         lua_ls = {
           -- cmd = { ... },
           -- filetypes = { ... },
