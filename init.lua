@@ -747,6 +747,12 @@ require('lazy').setup({
           --
           -- When you move your cursor, the highlights will be cleared (the second autocommand).
           local client = vim.lsp.get_client_by_id(event.data.client_id)
+
+          -- Disable Ruff's hover capability in favor of Pyright
+          if client and client.name == 'ruff' then
+            client.server_capabilities.hoverProvider = false
+          end
+
           if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('kickstart-lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
@@ -829,7 +835,31 @@ require('lazy').setup({
       local servers = {
         -- clangd = {},
         -- gopls = {},
-        pyright = {},
+        -- Add Ruff as a native LSP
+        ruff = {
+          init_options = {
+            settings = {
+              -- Any extra CLI arguments or ruff.toml configs can go here
+              logLevel = 'info',
+              lint = { enable = true },
+              organizeImports = true,
+              fixAll = true,
+            },
+          },
+        },
+        -- Tell Pyright to only do type-checking, let Ruff do the rest
+        pyright = {
+          settings = {
+            pyright = {
+              disableOrganizeImports = true, -- Using Ruff's import organizer
+            },
+            python = {
+              analysis = {
+                ignore = { '*' }, -- Ignore all files for analysis to exclusively use Ruff for linting
+              },
+            },
+          },
+        },
         -- rust_analyzer = {},
         -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
         --
@@ -875,6 +905,7 @@ require('lazy').setup({
         'stylua', -- Used to format Lua code
         'shellcheck', -- Used to lint shell scripts
         'shfmt', -- Used to format shell scripts
+        'ruff', -- Used for linting and formatting Python
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -1194,3 +1225,21 @@ require('lazy').setup({
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+
+-- -- Automatically run Ruff's organize imports and auto-fixes on save
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.py',
+  callback = function()
+    -- Request the LSP to organize imports
+    vim.lsp.buf.code_action {
+      context = { only = { 'source.organizeImports' } },
+      apply = true,
+    }
+    -- Request the LSP to fix all auto-fixable errors
+    vim.lsp.buf.code_action {
+      context = { only = { 'source.fixAll' } },
+      apply = true,
+    }
+  end,
+  desc = 'Run Ruff organize imports and fixAll on save',
+})
