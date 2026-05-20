@@ -196,6 +196,9 @@ vim.o.confirm = true
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
 
+-- Shortcut to quickly open and edit the Neovim configuration file (init.lua)
+vim.keymap.set('n', '<leader>ec', '<cmd>e $MYVIMRC<CR>', { desc = '[E]dit [C]onfig (init.lua)' })
+
 -- Jumplist navigation (Zellij-safe)
 -- `[J` = jump back (older), `]J` = jump forward (newer)
 vim.keymap.set('n', '[J', '<C-o>', { desc = 'Jump back (jumplist)', noremap = true, silent = true })
@@ -332,6 +335,56 @@ require('lazy').setup({
     end,
   },
 
+  -- Rapid screen navigation using search-based jump labels
+  {
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    ---@type Flash.Config
+    opts = {},
+    keys = {
+      {
+        's',
+        mode = { 'n', 'x', 'o' },
+        function()
+          require('flash').jump()
+        end,
+        desc = 'Flash',
+      },
+      {
+        'S',
+        mode = { 'n', 'x', 'o' },
+        function()
+          require('flash').treesitter()
+        end,
+        desc = 'Flash Treesitter',
+      },
+      {
+        'r',
+        mode = 'o',
+        function()
+          require('flash').remote()
+        end,
+        desc = 'Remote Flash',
+      },
+      {
+        'R',
+        mode = { 'o', 'x' },
+        function()
+          require('flash').treesitter_search()
+        end,
+        desc = 'Treesitter Search',
+      },
+      {
+        '<c-s>',
+        mode = { 'c' },
+        function()
+          require('flash').toggle()
+        end,
+        desc = 'Toggle Flash Search',
+      },
+    },
+  },
+
   {
     'folke/trouble.nvim',
     opts = {}, -- for default options, refer to the configuration section for custom setup.
@@ -387,7 +440,7 @@ require('lazy').setup({
 
       -- ✅ Partial accepts (no Alt keys, so Zellij won't steal them)
       cmap('<C-j>', 'copilot#AcceptLine()', 'Accept suggested LINE')
-      cmap('<C-.>', 'copilot#AcceptWord()', 'Accept suggested WORD')
+      cmap('<C-l>', 'copilot#AcceptWord()', 'Accept suggested WORD')
 
       -- ✅ Optional helpers
       cmap('<C-\\>', 'copilot#Accept("\\<CR>")', 'Accept FULL suggestion (alt to <Tab>)')
