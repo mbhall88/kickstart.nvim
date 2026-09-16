@@ -1202,6 +1202,23 @@ require('lazy').setup({
       --  Check out: https://github.com/echasnovski/mini.nvim
     end,
   },
+  {
+    'MeanderingProgrammer/render-markdown.nvim',
+    ft = { 'markdown' },
+    dependencies = { 'nvim-treesitter/nvim-treesitter' },
+    opts = {
+      -- Render in normal mode for reading.
+      -- Enter insert mode to see the raw Markdown while editing.
+      render_modes = { 'n', 'c', 't' },
+    },
+    config = function(_, opts)
+      require('render-markdown').setup(opts)
+
+      vim.keymap.set('n', '<leader>mr', '<cmd>RenderMarkdown buf_toggle<CR>', {
+        desc = 'Toggle [M]arkdown [R]endering',
+      })
+    end,
+  },
   { -- Highlight, edit, and navigate code
     'nvim-treesitter/nvim-treesitter',
     build = ':TSUpdate',
